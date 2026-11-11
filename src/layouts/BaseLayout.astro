@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { siteConfig } from '../config/site';
 
 interface Props {
+  lang?: 'fr' | 'en';
   title?: string;
   description?: string;
   keywords?: string;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const {
+  lang = 'fr',
   title = `${siteConfig.name} — ${siteConfig.legalName} | Du champ à votre cuisine`,
   description = "Approvisionnement en vivres frais et produits agricoles du terroir à Yaoundé. SRE accompagne ménages, restaurants et partenaires dans la recherche et la livraison de denrées de qualité selon leur budget.",
   keywords = "approvisionnement vivrier Yaoundé, vivres frais Cameroun, fruits et légumes Yaoundé, livraison courses Nkomkana, marché vivrier Cameroun, produits agricoles du terroir, SOUL REGAL SANS ÉGAL, SRE, panier ménage Yaoundé",
@@ -18,7 +20,11 @@ const {
 
 const siteUrl = siteConfig.website || 'https://sre.cm';
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const frUrl = new URL('/', siteUrl).toString();
+const enUrl = new URL('/en/', siteUrl).toString();
 const ogImageUrl = new URL('/images/hero-produce.jpg', siteUrl).toString();
+const ogLocale = lang === 'en' ? 'en_CM' : 'fr_CM';
+const schemaLang = lang === 'en' ? 'en-CM' : 'fr-CM';
 
 const schemas: any[] = [
   {
@@ -36,7 +42,7 @@ const schemas: any[] = [
     email: siteConfig.email,
     taxID: siteConfig.niu,
     identifier: siteConfig.rccm,
-    priceRange: 'Adapté selon le budget du client',
+    priceRange: lang === 'en' ? 'Adapted to customer budget' : 'Adapté selon le budget du client',
     currenciesAccepted: 'XAF',
     paymentAccepted: 'Espèces, Paiement Mobile (Orange Money, MTN MoMo), Virement',
     address: {
@@ -72,7 +78,7 @@ const schemas: any[] = [
     name: `${siteConfig.name} — ${siteConfig.legalName}`,
     description,
     publisher: { '@id': `${siteUrl}/#business` },
-    inLanguage: 'fr-CM',
+    inLanguage: schemaLang,
   },
 ];
 
@@ -97,7 +103,7 @@ const structuredData = {
 };
 ---
 <!doctype html>
-<html lang="fr" dir="ltr">
+<html lang={lang} dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -116,8 +122,11 @@ const structuredData = {
     <meta name="geo.position" content="3.8763;11.5174" />
     <meta name="ICBM" content="3.8763, 11.5174" />
 
-    <!-- Balise Canonique -->
+    <!-- Balise Canonique et Balises d'internationalisation Hreflang -->
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="fr" href={frUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={frUrl} />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -133,7 +142,7 @@ const structuredData = {
 
     <!-- Protocole Open Graph (Facebook, WhatsApp, LinkedIn) -->
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_CM" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:site_name" content={siteConfig.legalName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

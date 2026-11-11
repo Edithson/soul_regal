@@ -8,6 +8,13 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
+  i18n: {
+    defaultLocale: 'fr',
+    locales: ['fr', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

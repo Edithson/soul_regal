@@ -13,6 +13,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     let phone = '';
     let topic = '';
     let message = '';
+    let lang = 'fr';
 
     if (contentType.includes('application/json')) {
       const data = await request.json().catch(() => ({}));
@@ -22,6 +23,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       phone = String(data.phone || '').trim();
       topic = String(data.topic || '').trim();
       message = String(data.message || '').trim();
+      lang = String(data.lang || '').trim() || 'fr';
     } else {
       const formData = await request.formData().catch(() => new FormData());
       name = String(formData.get('name') || '').trim();
@@ -30,13 +32,18 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       phone = String(formData.get('phone') || '').trim();
       topic = String(formData.get('topic') || '').trim();
       message = String(formData.get('message') || '').trim();
+      lang = String(formData.get('lang') || '').trim() || 'fr';
     }
+
+    const isEn = lang.startsWith('en');
 
     if (!name || !email || !topic || !message) {
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Veuillez renseigner tous les champs obligatoires (nom, e-mail, besoin et message).',
+          message: isEn
+            ? 'Please fill in all required fields (name, email, topic, and message).'
+            : 'Veuillez renseigner tous les champs obligatoires (nom, e-mail, besoin et message).',
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
@@ -47,7 +54,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          message: 'Veuillez saisir une adresse e-mail valide.',
+          message: isEn
+            ? 'Please provide a valid email address.'
+            : 'Veuillez saisir une adresse e-mail valide.',
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
@@ -85,7 +94,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'Merci ! Votre demande a été enregistrée avec succès. Notre équipe vous recontactera très rapidement.',
+        message: isEn
+          ? 'Thank you! Your inquiry has been saved successfully. Our team will get back to you promptly.'
+          : 'Merci ! Votre demande a été enregistrée avec succès. Notre équipe vous recontactera très rapidement.',
         data: {
           id: messageId,
           mailSent: emailResult.sent,

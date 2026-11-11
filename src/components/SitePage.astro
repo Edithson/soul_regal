@@ -1,0 +1,552 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+import { getTranslations, type Locale } from '../i18n/translations';
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = 'fr' } = Astro.props;
+const t = getTranslations(lang);
+const hasSocial = Boolean(siteConfig.social.facebook || siteConfig.social.instagram || siteConfig.social.linkedin);
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} keywords={t.meta.keywords} faqs={t.faq.items}>
+  <div id="top" style="position: absolute; top: 0; left: 0; width: 1px; height: 1px; pointer-events: none;" aria-hidden="true"></div>
+
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <span class="announcement-dot"></span>
+      <span>{t.announcement.tagline}</span>
+      <span class="announcement-location">{siteConfig.location}</span>
+    </div>
+  </div>
+
+  <header class="site-header" id="main-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label={`${siteConfig.name} — ${lang === 'en' ? 'Home' : 'Accueil'}`}>
+        <span class="brand-mark"><span>S</span><span>R</span><span>E</span></span>
+        <span class="brand-copy"><strong>{siteConfig.name}</strong><small>{siteConfig.legalName}</small></span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label={lang === 'en' ? 'Open navigation menu' : 'Ouvrir le menu'} aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'}>
+        <a href="#maison">{t.nav.about}</a>
+        <a href="#solutions">{t.nav.solutions}</a>
+        <a href="#methode">{t.nav.method}</a>
+        <a href="#partenaires">{t.nav.partners}</a>
+        <a class="nav-cta" href="#contact">{t.nav.cta}</a>
+
+        <div class="lang-switcher" role="group" aria-label={lang === 'en' ? 'Switch language' : 'Changer de langue'}>
+          <a
+            href="/"
+            class:list={['lang-btn', { 'is-active': lang === 'fr' }]}
+            aria-current={lang === 'fr' ? 'page' : undefined}
+            title="Version française"
+          >
+            FR
+          </a>
+          <span class="lang-divider" aria-hidden="true">/</span>
+          <a
+            href="/en/"
+            class:list={['lang-btn', { 'is-active': lang === 'en' }]}
+            aria-current={lang === 'en' ? 'page' : undefined}
+            title="English version"
+          >
+            EN
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section-shell">
+      <div class="hero-glow"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy" data-reveal>
+          <div class="eyebrow"><span class="eyebrow-line"></span> {t.hero.eyebrow}</div>
+          <h1 set:html={t.hero.title}></h1>
+          <p class="hero-lead">{t.hero.lead}</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#solutions">{t.hero.btnPrimary}</a>
+            <a class="text-link" href="#maison">{t.hero.btnSecondary}</a>
+          </div>
+          <div class="hero-proof">
+            <div class="proof-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.5 3.5C10 3.5 4 7.3 4 14.2c0 3.2 2.3 5.3 5.4 5.3 7.2 0 11.1-7.2 11.1-16Z" />
+                <path d="M3.5 21c2.6-5.2 6.3-8.6 11.2-10.7" />
+              </svg>
+            </div>
+            <p><strong>{t.hero.proofTitle}</strong><span>{t.hero.proofText}</span></p>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal data-delay="140">
+          <div class="hero-image-main">
+            <img
+              src="/images/hero-produce.jpg"
+              width="1600"
+              height="1200"
+              alt={lang === 'en' ? 'Selection of fresh Cameroonian produce and vegetables on display' : 'Sélection de légumes et vivres frais du terroir camerounais sur un étal'}
+              fetchpriority="high"
+            />
+          </div>
+          <div class="hero-image-stamp">
+            <span>{t.hero.stampSub}</span>
+            <strong set:html={t.hero.stampTitle}></strong>
+          </div>
+          <div class="hero-floating-card">
+            <span class="floating-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7.5h16l-1.4 12H5.4L4 7.5Z" />
+                <path d="M8 8V6a4 4 0 0 1 8 0v2" />
+                <path d="m9 13 2 2 4-4" />
+              </svg>
+            </span>
+            <span><strong>{t.hero.floatingTitle}</strong><small>{t.hero.floatingSub}</small></span>
+          </div>
+          <span class="hero-vertical-note">{t.hero.verticalNote}</span>
+        </div>
+      </div>
+      <div class="container hero-bottomline">
+        <span>{t.hero.bottomAlliance}</span>
+        <span class="scroll-cue"><span></span> {t.hero.scrollCue}</span>
+        <span>{siteConfig.location}</span>
+      </div>
+    </section>
+
+    <section class="intro-strip" aria-label={lang === 'en' ? 'Our core guiding values' : 'Nos principes fondamentaux'}>
+      <div class="container intro-strip-grid">
+        <p class="strip-lead" set:html={t.introStrip.lead}></p>
+        {t.introStrip.items.map((item) => (
+          <div class="strip-item">
+            <span class="strip-number">{item.number}</span>
+            <div>
+              <strong>{item.title}</strong>
+              <small>{item.text}</small>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="product-band" aria-label={lang === 'en' ? 'Supplied agricultural food items' : 'Denrées vivrières approvisionnées'}>
+      <div class="container product-band-inner">
+        <span class="product-band-label">{t.productBand.label}</span>
+        <div class="product-tags">
+          {t.productBand.items.map((item, idx) => (
+            <>
+              {idx > 0 && <span class="tag-sep" aria-hidden="true">·</span>}
+              <span>{item}</span>
+            </>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-section" id="maison">
+      <div class="container about-grid">
+        <div class="about-visual" data-reveal>
+          <div class="about-image-large">
+            <img
+              src="/images/paysage2.jpg"
+              width="720"
+              height="900"
+              alt={lang === 'en' ? 'Fertile farming countryside around Yaoundé at sunrise' : 'Plantations et campagnes fertiles des environs de Yaoundé au lever du jour'}
+              loading="lazy"
+            />
+          </div>
+          <div class="about-image-small">
+            <img
+              src="/images/about-vegetables.jpg"
+              width="850"
+              height="1285"
+              alt={lang === 'en' ? 'Freshly picked leafy green vegetables' : 'Feuilles vertes et légumes maraîchers fraîchement cueillis'}
+              loading="lazy"
+            />
+          </div>
+          <div class="about-caption">
+            <span>{t.about.captionTitle}</span>
+            <strong set:html={t.about.captionText}></strong>
+          </div>
+        </div>
+        <div class="about-copy" data-reveal data-delay="100">
+          <div class="eyebrow"><span class="eyebrow-line"></span> {t.about.eyebrow}</div>
+          <h2 set:html={t.about.title}></h2>
+          <p class="section-lead">{t.about.lead}</p>
+          <p>{t.about.p1}</p>
+          <p>{t.about.p2}</p>
+          <a class="underlined-link" href="#methode">{t.about.link}</a>
+          <div class="signature">
+            <span class="signature-mark">SRE</span>
+            <span><strong>{siteConfig.legalName}</strong><small>{siteConfig.fullTagline}</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section solutions-section" id="solutions">
+      <div class="container">
+        <div class="section-heading section-heading-row" data-reveal>
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> {t.services.eyebrow}</div>
+            <h2 set:html={t.services.title}></h2>
+          </div>
+          <p>{t.services.lead}</p>
+        </div>
+        <div class="services-grid">
+          {t.services.items.map((service) => (
+            <article class={`service-card service-${service.tone}`} data-reveal>
+              <div class="service-topline">
+                <span class="service-icon" aria-hidden="true">
+                  {service.icon === 'basket' && (
+                    <svg viewBox="0 0 24 24"><path d="m3 9 2 11h14l2-11H3Z"/><path d="M7 9 12 3l5 6M8.5 12l.8 5M15.5 12l-.8 5M12 12v5"/></svg>
+                  )}
+                  {service.icon === 'store' && (
+                    <svg viewBox="0 0 24 24"><path d="M3 10h18l-1.5-6h-15L3 10Z"/><path d="M5 10v10h14V10M9 20v-6h6v6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></svg>
+                  )}
+                  {service.icon === 'globe' && (
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+                  )}
+                </span>
+              </div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+              <ul>
+                {service.points.map((point) => (
+                  <li>
+                    <span class="point-bullet" aria-hidden="true"></span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={service.href} class="service-link">{service.link}</a>
+              <span class="service-watermark">SRE</span>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="method-section section" id="methode">
+      <div class="container method-grid">
+        <div class="method-intro" data-reveal>
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> {t.method.eyebrow}</div>
+          <h2 set:html={t.method.title}></h2>
+          <p>{t.method.lead}</p>
+          <a class="button button-light" href="#contact">{t.method.button}</a>
+        </div>
+        <div class="steps-list">
+          {t.method.steps.map((step, index) => (
+            <div class="step-row" data-reveal data-delay={index * 75}>
+              <span class="step-number">{step.n}</span>
+              <div class="step-content">
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="method-decoration" aria-hidden="true">SRE</div>
+    </section>
+
+    <section class="partner-section section" id="partenaires">
+      <div class="container partner-grid">
+        <div class="partner-visual" data-reveal>
+          <img
+            src="/images/biyem-assi-market.jpg"
+            width="1400"
+            height="804"
+            alt={lang === 'en' ? 'Biyem-Assi food market in Yaoundé, trading center for Cameroonian harvests' : 'Marché vivrier de Biyem-Assi à Yaoundé, carrefour d’échanges des récoltes du Cameroun'}
+            loading="lazy"
+          />
+          <div class="partner-photo-label">
+            <span>{t.partners.photoLabelSub}</span>
+            <strong set:html={t.partners.photoLabelTitle}></strong>
+          </div>
+        </div>
+        <div class="partner-copy" data-reveal data-delay="100">
+          <div class="eyebrow"><span class="eyebrow-line"></span> {t.partners.eyebrow}</div>
+          <h2 set:html={t.partners.title}></h2>
+          <p class="section-lead">{t.partners.lead}</p>
+          <p>{t.partners.p1}</p>
+          <div class="partner-points">
+            {t.partners.points.map((pt, i) => (
+              <div>
+                <span class="partner-point-icon">{`0${i + 1}`}</span>
+                <p><strong>{pt.title}</strong><small>{pt.text}</small></p>
+              </div>
+            ))}
+          </div>
+          <p class="partner-note">{t.partners.note}</p>
+          <a class="button button-primary" href="#contact" data-contact-topic={t.contact.topics[2]}>{t.partners.button}</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto-band">
+      <div class="container manifesto-inner">
+        <p set:html={t.manifesto.quote}></p>
+        <span class="manifesto-sign">{siteConfig.legalName} — {t.manifesto.sign}</span>
+      </div>
+    </section>
+
+    <section class="faq-section section">
+      <div class="container faq-grid">
+        <div data-reveal>
+          <div class="eyebrow"><span class="eyebrow-line"></span> {t.faq.eyebrow}</div>
+          <h2 set:html={t.faq.title}></h2>
+          <p class="section-lead">{t.faq.lead}</p>
+          <a href="#contact" class="underlined-link">{t.faq.link}</a>
+        </div>
+        <div class="faq-list" data-reveal data-delay="100">
+          {t.faq.items.map((faq, index) => (
+            <details class="faq-item" open={index === 0}>
+              <summary><span>{faq.q}</span><i aria-hidden="true"></i></summary>
+              <p>{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section section" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-copy" data-reveal>
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> {t.contact.eyebrow}</div>
+          <h2 set:html={t.contact.title}></h2>
+          <p class="contact-lead">{t.contact.lead}</p>
+
+          <div class="contact-details">
+            <div>
+              <span class="contact-detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              <p>
+                <small>{t.contact.phoneLabel}</small>
+                <span>
+                  <strong data-config-phone>
+                    <a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}>{siteConfig.phone}</a>
+                    {' · '}
+                    <a href={`tel:${siteConfig.secondaryPhone.replace(/\s/g, '')}`}>{siteConfig.secondaryPhone}</a>
+                  </strong>
+                  {siteConfig.whatsapp && (
+                    <a
+                      href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(lang === 'en' ? 'Hello SRE, I would like to discuss sourcing fresh agricultural produce.' : 'Bonjour SRE, je souhaite échanger sur un approvisionnement en vivres frais.')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="contact-whatsapp-tag"
+                      aria-label={lang === 'en' ? 'Direct chat with SRE on WhatsApp' : 'Échanger directement avec SRE sur WhatsApp'}
+                    >
+                      <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M20.3 11.7a8.3 8.3 0 0 1-12.2 7.4L3 20l.9-4.8a8.3 8.3 0 1 1 16.4-3.5Z"/>
+                        <path d="M8.6 8.2c.2-.5.5-.5.8-.5h.4c.2 0 .3.1.4.4l.6 1.4c.1.2.1.4 0 .5l-.4.6c-.1.2-.2.3 0 .5.2.4.8 1.1 1.6 1.6.9.6 1.2.5 1.5.3l.6-.7c.2-.2.3-.2.6-.1l1.3.6c.3.1.4.2.4.4 0 .2-.1 1-.7 1.4-.5.4-1.1.6-1.8.4-.7-.2-1.5-.5-2.6-1.3-1.3-1-2.2-2.3-2.4-2.7-.3-.4-.6-1.2-.3-1.8Z"/>
+                      </svg>
+                      <span>{t.contact.whatsappPill}</span>
+                    </a>
+                  )}
+                </span>
+              </p>
+            </div>
+
+            <div>
+              <span class="contact-detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </span>
+              <p>
+                <small>{t.contact.emailLabel}</small>
+                <strong data-config-email><a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></strong>
+              </p>
+            </div>
+
+            <div>
+              <span class="contact-detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <p>
+                <small>{t.contact.locationLabel}</small>
+                <strong>{siteConfig.location}</strong>
+              </p>
+            </div>
+
+            <div>
+              <span class="contact-detail-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </span>
+              <p>
+                <small>{t.contact.legalLabel}</small>
+                <strong>RCCM : {siteConfig.rccm} &nbsp;·&nbsp; NIU : {siteConfig.niu}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contact-form" data-reveal data-delay="120">
+          <input type="hidden" name="lang" value={lang} />
+          <div class="form-heading">
+            <span>{t.contact.formHeading}</span>
+          </div>
+          <div class="form-row">
+            <label>{t.contact.labelName}
+              <input name="name" type="text" placeholder={t.contact.placeholderName} autocomplete="name" required />
+            </label>
+            <label>{t.contact.labelOrg}
+              <input name="organisation" type="text" placeholder={t.contact.placeholderOrg} autocomplete="organization" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>{t.contact.labelEmail}
+              <input name="email" type="email" placeholder={t.contact.placeholderEmail} autocomplete="email" required />
+            </label>
+            <label>{t.contact.labelPhone}
+              <input name="phone" type="tel" placeholder={t.contact.placeholderPhone} autocomplete="tel" />
+            </label>
+          </div>
+          <label>{t.contact.labelTopic}
+            <select name="topic" id="contact-topic" required>
+              <option value="" disabled selected>{t.contact.topicDefault}</option>
+              {t.contact.topics.map((topic) => (
+                <option value={topic}>{topic}</option>
+              ))}
+            </select>
+          </label>
+          <label>{t.contact.labelMessage}
+            <textarea name="message" rows="4" placeholder={t.contact.placeholderMessage} required></textarea>
+          </label>
+          <div class="form-footer">
+            <p>{t.contact.formPrivacy}</p>
+            <button class="button button-primary" type="submit" data-submitting={t.contact.submitting}>{t.contact.submitButton}</button>
+          </div>
+          <p
+            class="form-feedback"
+            id="form-feedback"
+            role="status"
+            aria-live="polite"
+            data-success-fallback={t.contact.successMessage}
+            data-error-fallback={t.contact.errorMessage}
+          ></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-main">
+      <a class="brand brand-footer" href="#top" aria-label={`${siteConfig.name} — ${lang === 'en' ? 'Back to top' : 'Retour au sommet'}`}>
+        <span class="brand-mark"><span>S</span><span>R</span><span>E</span></span>
+        <span class="brand-copy"><strong>{siteConfig.name}</strong><small>{siteConfig.legalName}</small></span>
+      </a>
+      <p>{siteConfig.fullTagline}<br /><em>{t.footer.taglineSub}</em></p>
+      <a class="footer-top" href="#top" aria-label={t.footer.top}>{t.footer.top} <span>↑</span></a>
+    </div>
+
+    {hasSocial && (
+      <div class="container footer-social">
+        <span class="footer-social-label">{t.footer.socialLabel}</span>
+        <div class="social-links">
+          {siteConfig.social.facebook && (
+            <a
+              href={siteConfig.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-link"
+              aria-label="Facebook SRE"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              <span>Facebook</span>
+            </a>
+          )}
+          {siteConfig.social.instagram && (
+            <a
+              href={siteConfig.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-link"
+              aria-label="Instagram SRE"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
+              <span>Instagram</span>
+            </a>
+          )}
+          {siteConfig.social.linkedin && (
+            <a
+              href={siteConfig.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-link"
+              aria-label="LinkedIn SRE"
+            >
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.64 1.64 0 1 0 1.64 1.64 1.64 1.64 0 0 0-1.64-1.64z"/>
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+          )}
+        </div>
+      </div>
+    )}
+
+    <div class="container footer-meta">
+      <div class="footer-legal-info">
+        <span><strong>{lang === 'en' ? 'Head Office:' : 'Siège :'}</strong> {siteConfig.location}</span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span><strong>RCCM :</strong> {siteConfig.rccm}</span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span><strong>NIU :</strong> {siteConfig.niu}</span>
+      </div>
+      <div class="footer-contact-links">
+        <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}>{siteConfig.phone}</a>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href={`tel:${siteConfig.secondaryPhone.replace(/\s/g, '')}`}>{siteConfig.secondaryPhone}</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>© {new Date().getFullYear()} {siteConfig.name} — {siteConfig.legalName}. {t.footer.rights}</span>
+      {siteConfig.developer.name && (
+        <span class="footer-dev">
+          {t.footer.dev}{' '}
+          {siteConfig.developer.url ? (
+            <a href={siteConfig.developer.url} target="_blank" rel="noopener noreferrer">
+              <strong>{siteConfig.developer.name}</strong> ↗
+            </a>
+          ) : (
+            <strong>{siteConfig.developer.name}</strong>
+          )}
+        </span>
+      )}
+      <a href="#contact">{t.footer.contactLink}</a>
+    </div>
+  </footer>
+
+  {siteConfig.whatsapp && (
+    <a
+      href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(lang === 'en' ? 'Hello SRE, I would like information regarding agricultural sourcing.' : 'Bonjour SRE, je souhaite des informations sur l’approvisionnement en vivres frais.')}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="whatsapp-fab"
+      aria-label={lang === 'en' ? 'Chat directly with SRE on WhatsApp' : 'Discuter directement avec SRE sur WhatsApp'}
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M20.3 11.7a8.3 8.3 0 0 1-12.2 7.4L3 20l.9-4.8a8.3 8.3 0 1 1 16.4-3.5Z"/>
+        <path d="M8.6 8.2c.2-.5.5-.5.8-.5h.4c.2 0 .3.1.4.4l.6 1.4c.1.2.1.4 0 .5l-.4.6c-.1.2-.2.3 0 .5.2.4.8 1.1 1.6 1.6.9.6 1.2.5 1.5.3l.6-.7c.2-.2.3-.2.6-.1l1.3.6c.3.1.4.2.4.4 0 .2-.1 1-.7 1.4-.5.4-1.1.6-1.8.4-.7-.2-1.5-.5-2.6-1.3-1.3-1-2.2-2.3-2.4-2.7-.3-.4-.6-1.2-.3-1.8Z"/>
+      </svg>
+      <span>{t.floatingWhatsapp}</span>
+    </a>
+  )}
+</BaseLayout>

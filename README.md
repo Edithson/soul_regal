@@ -36,6 +36,13 @@ Vitrine institutionnelle et commerciale pour SOUL REGAL SANS ÉGAL (SRE), entrep
   - Données structurées enrichies Schema.org (`LocalBusiness`, `WebSite`, et `FAQPage` pour les Rich Snippets Google).
   - Fichiers `robots.txt` et `sitemap.xml` configurés à la racine du domaine.
   - Zéro décalage de mise en page (CLS prévenu grâce aux dimensions d'images explicites).
+- **Internationalisation complète (Bilingue Français & Anglais)** :
+  - **Français par défaut** servi sur la racine `/`.
+  - **Version anglaise** servie sur `/en/`.
+  - Sélecteur de langue (`FR | EN`) intégré élégamment dans la navigation de bureau et le menu mobile.
+  - Balises de référencement multilingues automatiques : `hreflang="fr"`, `hreflang="en"`, `hreflang="x-default"`, `og:locale` et `inLanguage` (Schema.org).
+  - Dictionnaire centralisé et typé dans `src/i18n/translations.ts`.
+  - API de contact `/api/contact` bilingue renvoyant les messages de succès et de validation dans la langue de l'utilisateur.
 - **Ligne éditoriale poétique, soignée et authentique** :
   - Textes ancrés dans la réalité maraîchère et vivrière de Yaoundé (Nkomkana, Biyem-Assi, Obala...).
   - Élimination intégrale des tics de langage et symboles parasites artificiels (astérisques, flèches en puces, étoiles).

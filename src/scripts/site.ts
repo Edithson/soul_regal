@@ -103,9 +103,13 @@ contactForm?.addEventListener('submit', async (event) => {
   const phone = String(formData.get('phone') ?? '').trim();
   const topic = String(formData.get('topic') ?? '').trim();
   const message = String(formData.get('message') ?? '').trim();
+  const lang = String(formData.get('lang') ?? document.documentElement.lang ?? 'fr').trim();
+  const isEn = lang.startsWith('en');
 
   if (!name || !email || !topic || !message) {
-    feedback.textContent = 'Veuillez renseigner tous les champs obligatoires (nom, e-mail, besoin et message).';
+    feedback.textContent = isEn
+      ? 'Please fill in all required fields (name, email, topic, and message).'
+      : 'Veuillez renseigner tous les champs obligatoires (nom, e-mail, besoin et message).';
     feedback.classList.add('is-visible', 'is-warning');
     return;
   }
@@ -114,7 +118,7 @@ contactForm?.addEventListener('submit', async (event) => {
   if (submitBtn) {
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.7';
-    submitBtn.innerHTML = 'Envoi en cours...';
+    submitBtn.innerHTML = submitBtn.dataset.submitting || (isEn ? 'Sending inquiry...' : 'Envoi en cours...');
   }
 
   try {
@@ -124,7 +128,7 @@ contactForm?.addEventListener('submit', async (event) => {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: JSON.stringify({ name, organisation, email, phone, topic, message }),
+      body: JSON.stringify({ name, organisation, email, phone, topic, message, lang }),
     });
 
     const result = await res.json().catch(() => null);
@@ -133,19 +137,26 @@ contactForm?.addEventListener('submit', async (event) => {
       contactForm.reset();
       feedback.textContent =
         result.message ||
-        'Merci ! Votre demande a été enregistrée avec succès. Notre équipe vous recontactera rapidement.';
+        feedback.dataset.successFallback ||
+        (isEn
+          ? 'Thank you! Your inquiry has been saved successfully. Our team will get back to you promptly.'
+          : 'Merci ! Votre demande a été enregistrée avec succès. Notre équipe vous recontactera rapidement.');
       feedback.classList.add('is-visible', 'is-success');
     } else {
       const errMsg =
         result?.message ||
-        'Une erreur est survenue lors de l’envoi. Vous pouvez nous contacter directement par WhatsApp ou e-mail.';
+        feedback.dataset.errorFallback ||
+        (isEn
+          ? 'An error occurred while sending. You can reach us directly via WhatsApp or email.'
+          : 'Une erreur est survenue lors de l’envoi. Vous pouvez nous contacter directement par WhatsApp ou e-mail.');
       feedback.textContent = errMsg;
       feedback.classList.add('is-visible', 'is-warning');
     }
   } catch (err) {
     console.error('Erreur réseau / API :', err);
-    feedback.textContent =
-      'Impossible de joindre le serveur. Vous pouvez nous contacter directement au +237 683 511 935 ou par e-mail.';
+    feedback.textContent = isEn
+      ? 'Unable to connect to the server. You can reach us directly by phone or WhatsApp.'
+      : 'Impossible de joindre le serveur. Vous pouvez nous contacter directement au +237 683 511 935 ou par e-mail.';
     feedback.classList.add('is-visible', 'is-warning');
   } finally {
     if (submitBtn) {

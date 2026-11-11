@@ -68,6 +68,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .nav-cta { display: inline-flex; align-items: center; gap: 18px; padding: 13px 17px; border: 1px solid rgba(23,57,47,.24); border-radius: 3px; color: var(--forest); transition: background .2s ease, color .2s ease, border .2s ease; }
 .nav-cta span { font-size: 16px; }
 .nav-cta:hover { background: var(--forest); border-color: var(--forest); color: white; }
+
+.lang-switcher { display: inline-flex; align-items: center; gap: 3px; padding: 4px 8px; border: 1px solid rgba(23,57,47,.16); border-radius: 20px; background: rgba(23,57,47,.04); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+.lang-btn { color: #6f7b73; text-decoration: none; padding: 2px 5px; border-radius: 12px; transition: color .2s ease, background .2s ease; }
+.lang-btn:hover { color: var(--forest); }
+.lang-btn.is-active { color: var(--forest); font-weight: 800; background: rgba(23,57,47,.1); }
+.lang-divider { color: rgba(23,57,47,.25); font-size: 8px; user-select: none; }
+
 .menu-toggle { display: none; }
 
 .hero { position: relative; overflow: hidden; padding: 72px 0 27px; background: var(--cream); }
@@ -332,6 +339,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .main-nav > a:not(.nav-cta) { padding: 15px 0; border-bottom: 1px solid var(--line); }
   .main-nav > a:not(.nav-cta)::after { display: none; }
   .nav-cta { justify-content: space-between; margin-top: 18px; padding: 14px 16px; }
+  .main-nav .lang-switcher { align-self: flex-start; margin-top: 14px; padding: 6px 12px; font-size: 11px; }
   .hero { padding-top: 58px; }
   .hero-grid { grid-template-columns: 1fr 1fr; min-height: 470px; }
   .hero h1 { font-size: clamp(56px, 8vw, 76px); }
