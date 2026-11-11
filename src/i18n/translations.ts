@@ -150,7 +150,6 @@ export interface Translations {
     socialLabel: string;
     rights: string;
     dev: string;
-    contactLink: string;
   };
   floatingWhatsapp: string;
 }
@@ -393,7 +392,6 @@ export const translations: Record<Locale, Translations> = {
       socialLabel: 'Suivez SRE :',
       rights: 'Tous droits réservés.',
       dev: 'Conception & Développement :',
-      contactLink: 'Nous contacter',
     },
     floatingWhatsapp: 'WhatsApp direct',
   },
@@ -634,7 +632,6 @@ export const translations: Record<Locale, Translations> = {
       socialLabel: 'Follow SRE:',
       rights: 'All rights reserved.',
       dev: 'Design & Development:',
-      contactLink: 'Contact us',
     },
     floatingWhatsapp: 'Chat on WhatsApp',
   },
