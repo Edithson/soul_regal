@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${siteConfig.name} — ${siteConfig.legalName} | ${siteConfig.tagline}`,
+  description = siteConfig.mission,
+} = Astro.props;
+const canonical = siteConfig.website ? new URL(Astro.url.pathname, siteConfig.website).toString() : undefined;
+const ogImage = siteConfig.website
+  ? new URL('/images/hero-produce.jpg', siteConfig.website).toString()
+  : '/images/hero-produce.jpg';
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.legalName,
+  alternateName: siteConfig.name,
+  slogan: siteConfig.fullTagline,
+  description,
+  areaServed: { '@type': 'Country', name: siteConfig.country },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteConfig.district,
+    addressLocality: siteConfig.city,
+    addressCountry: siteConfig.countryCode,
+  },
+  taxID: siteConfig.niu,
+  identifier: siteConfig.rccm,
+  telephone: siteConfig.phones,
+  ...(siteConfig.website ? { url: siteConfig.website } : {}),
+  ...(siteConfig.email ? { email: siteConfig.email } : {}),
+};
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17392f" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="fr_CM" />
+    <meta property="og:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script src="../scripts/site.ts"></script>
+  </body>
+</html>
