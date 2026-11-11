@@ -31,8 +31,14 @@ Vitrine institutionnelle et commerciale pour SOUL REGAL SANS ÉGAL (SRE), entrep
   - En cas d'indisponibilité momentanée du serveur SMTP, les messages restent systématiquement conservés dans la base SQLite.
 - **Fichier `.env` à la racine** :
   - Centralisation de toutes les données du site, de la base de données, des accès SMTP et des réglages du serveur.
-- **Images hébergées en local dans `public/images/`** :
-  - Aucune dépendance à des CDN tiers pour les visuels.
+- **Référencement naturel (SEO) poussé au maximum** :
+  - Balises méta complètes : OpenGraph, Twitter Cards, balises géographiques (Yaoundé / Centre / Cameroun) et mots-clés stratégiques du vivrier local.
+  - Données structurées enrichies Schema.org (`LocalBusiness`, `WebSite`, et `FAQPage` pour les Rich Snippets Google).
+  - Fichiers `robots.txt` et `sitemap.xml` configurés à la racine du domaine.
+  - Zéro décalage de mise en page (CLS prévenu grâce aux dimensions d'images explicites).
+- **Ligne éditoriale poétique, soignée et authentique** :
+  - Textes ancrés dans la réalité maraîchère et vivrière de Yaoundé (Nkomkana, Biyem-Assi, Obala...).
+  - Élimination intégrale des tics de langage et symboles parasites artificiels (astérisques, flèches en puces, étoiles).
 
 ---
 

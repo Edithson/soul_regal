@@ -76,7 +76,7 @@ if (phoneTarget && siteConfig.phone) {
   phoneTarget.append(phone1);
 
   if (siteConfig.secondaryPhone) {
-    phoneTarget.append(document.createTextNode(' / '));
+    phoneTarget.append(document.createTextNode(' · '));
     const phone2 = document.createElement('a');
     phone2.href = `tel:${siteConfig.secondaryPhone.replace(/\s/g, '')}`;
     phone2.textContent = siteConfig.secondaryPhone;
@@ -154,6 +154,22 @@ contactForm?.addEventListener('submit', async (event) => {
       submitBtn.innerHTML = originalBtnContent;
     }
   }
+});
+
+// Bouton "Retour en haut" avec défilement fluide garanti vers le sommet absolu
+const topButtons = document.querySelectorAll<HTMLElement>('.footer-top, a[href="#top"]');
+topButtons.forEach((btn) => {
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+    if (window.history.pushState) {
+      window.history.pushState(null, '', '#top');
+    }
+  });
 });
 
 // Année automatique si le pied de page est déplacé dans un composant réutilisable.
