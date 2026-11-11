@@ -5,6 +5,8 @@ Vitrine institutionnelle et commerciale pour SOUL REGAL SANS ÉGAL (SRE), entrep
 > **Slogan :** SRE – Du champ à votre cuisine.  
 > **Mission :** Pour vos besoins en produits agricoles et alimentaires, SRE vous accompagne dans la recherche et l'approvisionnement selon votre budget.
 
+---
+
 ## Informations officielles & Coordonnées
 
 - **Dénomination :** SOUL REGAL SANS ÉGAL (SRE)
@@ -14,87 +16,180 @@ Vitrine institutionnelle et commerciale pour SOUL REGAL SANS ÉGAL (SRE), entrep
 - **RCCM :** CM-NSI-02-2026-A10-02047
 - **NIU :** P109119001467B
 
-## Choix techniques
+---
 
-- **Astro 7** : génération statique, HTML ultra-léger et socle SEO optimisé.
-- **Tailwind CSS 4** via le plugin Vite : base utilitaire moderne et design system sur mesure dans `src/styles/global.css`.
-- **TypeScript** pour la logique et les interactions côté navigateur.
-- **Images locales** : toutes les photographies sont hébergées en local dans `public/images/` pour une autonomie totale et des performances optimales.
-- Pas de framework JavaScript lourd : navigation mobile, animations d'apparition, accordéons FAQ et formulaire gérés en JavaScript natif.
+## Architecture & Choix techniques
 
-## Prérequis
+- **Astro 7 avec adaptateur Node.js (`@astrojs/node`)** en mode `standalone` :
+  - La page vitrine est pré-rendue statiquement (`prerender = true`) pour un temps de chargement ultra-rapide.
+  - La route d'API `/api/contact` s'exécute côté serveur pour traiter les demandes de façon sécurisée.
+- **Base de données SQLite intégrée (`node:sqlite`)** :
+  - Stockage local dans `./data/sre.sqlite` avec mode WAL (haute performance, intégrité et zéro dépendance native externe).
+  - Tous les messages de contact y sont enregistrés avec horodatage, coordonnées, statut d'envoi du mail et IP.
+- **Envoi d'e-mails via SMTP (`nodemailer`)** :
+  - Notification automatique reçue par SRE avec mise en page HTML soignée.
+  - En cas d'indisponibilité momentanée du serveur SMTP, les messages restent systématiquement conservés dans la base SQLite.
+- **Fichier `.env` à la racine** :
+  - Centralisation de toutes les données du site, de la base de données, des accès SMTP et des réglages du serveur.
+- **Images hébergées en local dans `public/images/`** :
+  - Aucune dépendance à des CDN tiers pour les visuels.
 
-- Node.js **22.12 ou supérieur**
-- npm 10 ou supérieur
+---
 
-## Démarrage
+## Configuration via `.env`
+
+Copiez `.env.example` vers `.env` (ou éditez le `.env` existant) :
+
+```env
+# 1. INFORMATIONS DU SITE
+SITE_NAME="SRE"
+SITE_LEGAL_NAME="SOUL REGAL SANS ÉGAL"
+SITE_TAGLINE="Du champ à votre cuisine."
+SITE_FULL_TAGLINE="SRE – Du champ à votre cuisine."
+SITE_MISSION="Pour vos besoins en produits agricoles et alimentaires, SRE vous accompagne dans la recherche et l'approvisionnement selon votre budget."
+SITE_LOCATION="Nkomkana, Yaoundé – Cameroun"
+SITE_CITY="Yaoundé"
+SITE_DISTRICT="Nkomkana"
+SITE_COUNTRY="Cameroun"
+SITE_COUNTRY_CODE="CM"
+SITE_PHONE="+237 683 511 935"
+SITE_SECONDARY_PHONE="+237 694 929 167"
+SITE_WHATSAPP="237683511935"
+SITE_WHATSAPP_SECONDARY="237694929167"
+SITE_EMAIL="sre.cameroun@gmail.com"
+SITE_RCCM="CM-NSI-02-2026-A10-02047"
+SITE_NIU="P109119001467B"
+SITE_WEBSITE=""
+
+# 2. BASE DE DONNÉES SQLITE
+DB_PATH="./data/sre.sqlite"
+
+# 3. ENVOI DES E-MAILS (SMTP)
+# Pour Gmail, générez un mot de passe d'application dans votre compte Google (Sécurité > Validation en 2 étapes > Mots de passe des applications)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="465"
+SMTP_SECURE="true"
+SMTP_USER="sre.cameroun@gmail.com"
+SMTP_PASS="votre_mot_de_passe_application"
+MAIL_FROM="\"SOUL REGAL SANS ÉGAL (SRE)\" <sre.cameroun@gmail.com>"
+MAIL_TO="sre.cameroun@gmail.com"
+
+# 4. SERVEUR
+HOST="0.0.0.0"
+PORT="4321"
+```
+
+---
+
+## Commandes
+
+### Développement local
 
 ```bash
 npm install
 npm run dev
 ```
 
-Le serveur de développement affiche l'adresse locale à ouvrir dans le navigateur (généralement `http://localhost:4321`).
-
-Pour générer le site statique :
+### Build de production
 
 ```bash
 npm run build
-npm run preview
 ```
 
-Le site prêt à déployer se trouve dans `dist/`.
+Le serveur prêt pour la production est compilé dans `dist/`.
 
-## Configuration
+### Lancement du serveur Node
 
-Les coordonnées et métadonnées sont centralisées dans `src/config/site.ts` :
-
-```ts
-export const siteConfig = {
-  name: 'SRE',
-  legalName: 'SOUL REGAL SANS ÉGAL',
-  tagline: 'Du champ à votre cuisine.',
-  fullTagline: 'SRE – Du champ à votre cuisine.',
-  mission: "Pour vos besoins en produits agricoles et alimentaires, SRE vous accompagne dans la recherche et l'approvisionnement selon votre budget.",
-  email: 'sre.cameroun@gmail.com',
-  phone: '+237 683 511 935',
-  secondaryPhone: '+237 694 929 167',
-  phones: ['+237 683 511 935', '+237 694 929 167'],
-  whatsapp: '237683511935',
-  whatsappSecondary: '237694929167',
-  location: 'Nkomkana, Yaoundé – Cameroun',
-  city: 'Yaoundé',
-  district: 'Nkomkana',
-  country: 'Cameroun',
-  countryCode: 'CM',
-  rccm: 'CM-NSI-02-2026-A10-02047',
-  niu: 'P109119001467B',
-  website: '',
-};
+```bash
+npm start
+# Équivalent à : node ./dist/server/entry.mjs
 ```
 
-## Structure
+---
+
+## Déploiement sur VPS Debian 13
+
+### 1. Prérequis sur le VPS Debian 13
+
+```bash
+# Installer Node.js 22 ou 24 (LTS)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs git nginx
+
+# Installer PM2 pour superviser le serveur en tâche de fond
+sudo npm install -g pm2
+```
+
+### 2. Cloner et installer le projet
+
+```bash
+cd /var/www
+git clone <votre-depot> sre
+cd sre
+npm install
+cp .env.example .env  # Renseigner vos accès réels dans .env
+npm run build
+```
+
+### 3. Démarrer avec PM2
+
+```bash
+pm2 start npm --name "sre-vitrine" -- run start
+pm2 save
+pm2 startup
+```
+
+### 4. Configuration Nginx (Reverse Proxy)
+
+Dans `/etc/nginx/sites-available/sre` :
+
+```nginx
+server {
+    server_name votre-domaine.cm www.votre-domaine.cm;
+
+    location / {
+        proxy_pass http://127.0.0.1:4321;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Activez le site et rechargez Nginx :
+
+```bash
+sudo ln -s /etc/nginx/sites-available/sre /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+
+## Structure du projet
 
 ```text
 src/
-├── config/site.ts          # Identité, mentions légales et coordonnées de SRE
+├── config/site.ts          # Lecture dynamique des variables .env avec fallbacks officiels
 ├── layouts/BaseLayout.astro # Gabarit HTML, métadonnées OpenGraph & Schema.org
-├── pages/index.astro       # Sections de la vitrine
-├── scripts/site.ts         # Menu, animations, formulaire & bouton WhatsApp
-└── styles/global.css       # Design system, charte graphique et responsive
+├── lib/
+│   ├── db.ts               # Base SQLite native (node:sqlite, table contacts, WAL)
+│   └── mailer.ts           # Envoi de mails SMTP (nodemailer, template HTML responsive)
+├── pages/
+│   ├── api/contact.ts      # Endpoint POST /api/contact (insertion SQLite + envoi mail)
+│   └── index.astro         # Page vitrine pré-rendue
+├── scripts/site.ts         # Soumission asynchrone AJAX, menu, animations, WhatsApp
+└── styles/global.css       # Design system et responsive
 public/
 ├── favicon.svg             # Favicon SVG
 └── images/                 # Visuels hébergés localement
-    ├── hero-produce.jpg
-    ├── about-landscape.jpg
-    ├── about-vegetables.jpg
-    └── partner-meeting.jpg
+data/
+└── sre.sqlite              # Base de données SQLite (créée automatiquement, ignorée par git)
+.env                        # Variables d'environnement actives
+.env.example                # Modèle documenté des variables
 ```
-
-## Direction artistique
-
-- Vert forêt : confiance, nature et stabilité.
-- Ivoire et sauge : sobriété, lumière et fraîcheur.
-- Terracotta : accent chaleureux inspiré de la terre et des récoltes.
-- Titres éditoriaux en DM Serif Display, interface en DM Sans.
-- Mise en page responsive, animations discrètes et respect de `prefers-reduced-motion`.

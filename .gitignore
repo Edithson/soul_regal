@@ -5,3 +5,11 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+
+# SQLite local data
+data/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db

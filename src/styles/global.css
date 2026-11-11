@@ -262,7 +262,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .form-footer .button { min-height: 47px; gap: 12px; padding-inline: 15px; font-size: 10px; }
 .form-feedback { display: none; margin: 15px 0 0; padding: 10px 12px; background: #e9eddf; color: var(--forest); font-size: 10px; line-height: 1.6; }
 .form-feedback.is-visible { display: block; }
-.form-feedback.is-warning { background: #f4e8dc; color: #81553e; }
+.form-feedback.is-warning { background: #f4e8dc; color: #81553e; border-left: 3px solid #d97857; }
+.form-feedback.is-success { background: #e3ebd8; color: var(--forest); border-left: 3px solid #6c8a4c; }
 
 .site-footer { background: var(--forest-deep); color: white; }
 .footer-main { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 40px; min-height: 155px; }
