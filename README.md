@@ -111,11 +111,20 @@ npm run build
 
 Le serveur prêt pour la production est compilé dans `dist/`.
 
+### Initialisation de la base de données SQLite
+
+La base de données et son dossier `./data` sont automatiquement créés dès le démarrage du serveur. Vous pouvez aussi l'initialiser manuellement à tout moment :
+
+```bash
+npm run db:init
+```
+
 ### Lancement du serveur Node
 
 ```bash
 npm start
-# Équivalent à : node ./dist/server/entry.mjs
+# Ou directement :
+node server.mjs
 ```
 
 ---
@@ -142,12 +151,13 @@ cd sre
 npm install
 cp .env.example .env  # Renseigner vos accès réels dans .env
 npm run build
+npm run db:init       # Initialise immédiatement ./data/sre.sqlite
 ```
 
 ### 3. Démarrer avec PM2
 
 ```bash
-pm2 start npm --name "sre-vitrine" -- run start
+pm2 start server.mjs --name "sre-vitrine"
 pm2 save
 pm2 startup
 ```

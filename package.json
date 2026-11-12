@@ -4,10 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev --host 0.0.0.0",
+    "dev": "node scripts/init-db.mjs && astro dev --host 0.0.0.0",
     "build": "astro build",
     "preview": "astro preview --host 0.0.0.0",
-    "start": "node ./dist/server/entry.mjs"
+    "db:init": "node scripts/init-db.mjs",
+    "prestart": "node scripts/init-db.mjs",
+    "start": "node server.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.12",
