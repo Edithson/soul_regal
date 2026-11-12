@@ -191,7 +191,7 @@ if (siteConfig.whatsapp) {
   const whatsappLink = document.createElement('a');
   whatsappLink.className = 'whatsapp-fab';
   whatsappLink.href = `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
-    'Bonjour SRE, je souhaite obtenir des informations sur vos services.'
+    'Bonjour SRE. Je viens de visiter votre site et je souhaite obtenir des informations sur vos services.'
   )}`;
   whatsappLink.target = '_blank';
   whatsappLink.rel = 'noopener noreferrer';
