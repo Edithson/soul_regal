@@ -2,7 +2,7 @@
  * Informations et coordonnées officielles de SRE (Soul Regal sans Égal).
  * Les valeurs proviennent du fichier .env à la racine avec des valeurs par défaut sécurisées.
  */
-function getEnv(key: string, defaultValue: string = ''): string {
+function getEnv(key: string, defaultValue = ''): string {
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key] !== undefined) {
     const val = String(import.meta.env[key]).trim();
     if (val.length > 0) return val;

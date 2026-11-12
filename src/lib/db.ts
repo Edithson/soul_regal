@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { getEnv } from './env';
 
 export interface ContactRecord {
   id?: number;
@@ -22,7 +23,7 @@ let dbInstance: DatabaseSync | null = null;
 export function getDb(): DatabaseSync {
   if (dbInstance) return dbInstance;
 
-  const rawPath = process.env.DB_PATH || './data/sre.sqlite';
+  const rawPath = getEnv('DB_PATH', './data/sre.sqlite');
   const resolvedPath = path.isAbsolute(rawPath)
     ? rawPath
     : path.resolve(process.cwd(), rawPath);

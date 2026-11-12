@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { getEnv, getNumberEnv, getBoolEnv } from './env';
 
 export interface EmailPayload {
   name: string;
@@ -25,11 +26,11 @@ function escapeHtml(text: string): string {
 }
 
 export async function sendContactEmail(payload: EmailPayload): Promise<EmailResult> {
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || 465);
-  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const host = getEnv('SMTP_HOST');
+  const port = getNumberEnv('SMTP_PORT', 465);
+  const secure = getBoolEnv('SMTP_SECURE', port === 465);
+  const user = getEnv('SMTP_USER');
+  const pass = getEnv('SMTP_PASS');
 
   if (!host || !user || !pass) {
     const errorMsg = 'SMTP_HOST, SMTP_USER ou SMTP_PASS manquant dans .env. Message sauvegardé en base de données, mais e-mail non envoyé.';
@@ -44,8 +45,8 @@ export async function sendContactEmail(payload: EmailPayload): Promise<EmailResu
     auth: { user, pass },
   });
 
-  const mailTo = process.env.MAIL_TO || user;
-  const mailFrom = process.env.MAIL_FROM || `"SRE — Du champ à votre cuisine" <${user}>`;
+  const mailTo = getEnv('MAIL_TO') || user;
+  const mailFrom = getEnv('MAIL_FROM') || `"SOUL REGAL SANS ÉGAL (SRE)" <${user}>`;
 
   const safeName = escapeHtml(payload.name);
   const safeOrg = escapeHtml(payload.organisation || 'Non précisée');
